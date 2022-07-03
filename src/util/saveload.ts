@@ -4,7 +4,7 @@ import { Notify } from 'quasar';
 import { generateInitialAutoState } from '@/features/auto/auto';
 
 import type { DecimalSource } from 'break_eternity.js';
-import { Automated } from '@/features/auto/auto';
+import type { Automated } from '@/features/auto/auto';
 
 export interface Version {
   alpha?: string;
