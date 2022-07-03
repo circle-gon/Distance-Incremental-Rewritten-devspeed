@@ -1,10 +1,10 @@
 <template>
-  <div>
-    Devspeed: {{devSpeed}}<br/>
-    Input devSpeed: <input type="number" v-model="devSpeed" />
-  </div>
   <div class="left">
     <div class="scrollable">
+      <div>
+        Devspeed: {{ devSpeed }}<br />
+        Input devSpeed: <input type="input" v-model="devSpeed" />
+      </div>
       <Basics />
       <div>
         <button
@@ -28,25 +28,25 @@
 </template>
 
 <script setup lang="ts">
-import { load, player } from "./main";
-import {computed} from "vue"
-import Tabs from "./flourish/tabs/tabs.vue";
-import Options from "./flourish/options/options.vue";
-import Stats from "./flourish/other/stats.vue";
-import Achs from "./features/achs/achs.vue";
-import Basics from "./features/basics/basics.vue";
-import Rockets from "./features/rockets/rockets.vue";
-import Auto from "./features/auto/auto.vue";
+import { load, player } from './main';
+import { computed } from 'vue';
+import Tabs from './flourish/tabs/tabs.vue';
+import Options from './flourish/options/options.vue';
+import Stats from './flourish/other/stats.vue';
+import Achs from './features/achs/achs.vue';
+import Basics from './features/basics/basics.vue';
+import Rockets from './features/rockets/rockets.vue';
+import Auto from './features/auto/auto.vue';
 
 load();
 const devSpeed = computed({
   get: () => player.devSpeed,
   set: (val: string) => {
-    const num = Number.parseFloat(val)
-    if (Number.isNaN(num)) return
-    player.devSpeed = num
-  }
-})
+    const num = Number.parseFloat(val);
+    if (Number.isNaN(num)) return;
+    player.devSpeed = num;
+  },
+});
 </script>
 
 <style>
@@ -55,13 +55,15 @@ const devSpeed = computed({
   margin: 0 auto;
   text-align: center;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
-  overflow: hidden;
   transition-duration: 0.2s;
   cursor: default;
   user-select: none;
   line-height: 1em;
 }
 
+input {
+  color: black;
+}
 body {
   background-color: rgb(28, 28, 28) !important;
 }
@@ -73,7 +75,6 @@ body {
 .scrollable {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  overflow-x: hidden;
   min-height: 150px;
   max-height: 100vh;
 }

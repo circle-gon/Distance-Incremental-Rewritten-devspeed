@@ -1,16 +1,16 @@
-import { player } from "@/main";
-import { addFeature, signal } from "@/util/feature";
-import { format, formatWhole } from "@/util/format";
-import { computed } from "@vue/reactivity";
-import Decimal from "break_eternity.js";
-import { hasAch } from "../achs/achs";
-import { rocketFuel } from "../rocketFuel/rocketFuel";
-import { rockets } from "../rockets/rockets";
-import { Automated } from "../auto/auto";
+import { player } from '@/main';
+import { addFeature, signal } from '@/util/feature';
+import { format, formatWhole } from '@/util/format';
+import { computed } from '@vue/reactivity';
+import Decimal from 'break_eternity.js';
+import { hasAch } from '../achs/achs';
+import { rocketFuel } from '../rocketFuel/rocketFuel';
+import { rockets } from '../rockets/rockets';
+import { Automated } from '../auto/auto';
 
-import type { Feature } from "@/util/feature";
-import type { ComputedRef } from "@vue/reactivity";
-import type { DecimalSource } from "break_eternity.js";
+import type { Feature } from '@/util/feature';
+import type { ComputedRef } from '@vue/reactivity';
+import type { DecimalSource } from 'break_eternity.js';
 
 export const RANK_DESCS: Record<number, ComputedRef<string>> = {
   2: computed(() => `increase Maximum Velocity by ${formatWhole(1)} m/s.`),
@@ -89,12 +89,12 @@ interface BasicActions {
 }
 
 export const basics: Feature<BasicData, BasicActions> = addFeature(
-  "basics",
+  'basics',
   2,
   {
     unl: {
       reached: computed(() => true),
-      desc: computed(() => ""),
+      desc: computed(() => ''),
     },
 
     data: {
@@ -259,9 +259,11 @@ export const basics: Feature<BasicData, BasicActions> = addFeature(
 
     receptors: {
       tick: (diff) => {
-        player.distance = Decimal.mul(player.velocity, 1e4)
-        player.velocity = Decimal.mul(basics.data.accel.value, 1e4)
-          .min(basics.data.maxVelocity.value);
+        player.distance = Decimal.mul(player.velocity, player.devSpeed);
+        player.velocity = Decimal.mul(
+          basics.data.accel.value,
+          player.devSpeed
+        ).min(basics.data.maxVelocity.value);
       },
 
       reset: (id) => {
@@ -284,7 +286,7 @@ export const basics: Feature<BasicData, BasicActions> = addFeature(
 
         player.rank = Decimal.add(player.rank, 1);
 
-        signal("reset", 0);
+        signal('reset', 0);
       },
 
       tierUp: () => {
@@ -292,7 +294,7 @@ export const basics: Feature<BasicData, BasicActions> = addFeature(
 
         player.tier = Decimal.add(player.tier, 1);
 
-        signal("reset", 1);
+        signal('reset', 1);
       },
     },
   }
