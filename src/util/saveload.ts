@@ -24,6 +24,7 @@ interface OptData {
 
 export type Save = {
   tab: string | null;
+  devSpeed: number;
   version: Version;
   achs: number[];
   saveID: number;
