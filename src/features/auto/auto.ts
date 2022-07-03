@@ -1,12 +1,13 @@
-import { player } from "@/main";
-import Decimal from "break_eternity.js";
-import { addFeature } from "@/util/feature";
-import { computed } from "vue";
-import { format, formatWhole } from "@/util/format";
-import { basics } from "../basics/basics";
+import { player } from '@/main';
+import Decimal from 'break_eternity.js';
+import type { DecimalSource } from 'break_eternity.js';
+import { addFeature } from '@/util/feature';
+import { computed } from 'vue';
+import { format, formatWhole } from '@/util/format';
+import { basics } from '../basics/basics';
 
-import type { Feature } from "@/util/feature";
-import type { ComputedRef } from "vue";
+import type { Feature } from '@/util/feature';
+import type { ComputedRef } from 'vue';
 
 export enum Automated {
   Ranks,
@@ -25,6 +26,7 @@ type AutoData = Record<
     upgReq: Decimal;
     canBuyUpg: boolean;
     masteryDesc: string;
+    bulkBuy: Decimal;
   }
 >;
 
@@ -32,6 +34,7 @@ interface AutoActions {
   upgrade: (type: Automated) => void;
   master: (type: Automated) => void;
   toggle: (type: Automated) => void;
+  bulk: (type: Automated) => void;
 }
 
 type AutoExtensions = {
@@ -43,7 +46,12 @@ type AutoExtensions = {
     }
   >;
 };
-
+const costs = {
+  [Automated.Ranks]: (lvl: DecimalSource) =>
+    Decimal.pow(2, Decimal.pow(lvl, 2)).times(1e3),
+  [Automated.Tiers]: (lvl: DecimalSource) =>
+    Decimal.pow(3, Decimal.pow(lvl, 2)).times(1e4),
+};
 export function generateInitialAutoState() {
   return new Array(AUTO_COUNT)
     .fill({
@@ -67,7 +75,7 @@ export const auto: Feature<
       [key2 in keyof AutoData[key]]: ComputedRef<AutoData[key][key2]>;
     };
   }
-> = addFeature("auto", 5, {
+> = addFeature('auto', 5, {
   unl: {
     reached: computed(() => Decimal.gte(player.rockets, 1e4)),
     desc: computed(
@@ -77,8 +85,8 @@ export const auto: Feature<
 
   data: {
     [Automated.Ranks]: {
-      visible: computed(() => player.featuresUnl.includes("auto")),
-      unl: computed(() => player.featuresUnl.includes("auto")),
+      visible: computed(() => player.featuresUnl.includes('auto')),
+      unl: computed(() => player.featuresUnl.includes('auto')),
       desc: computed(() => `Nothing :)`),
       power: computed(() =>
         Decimal.sub(
@@ -90,10 +98,15 @@ export const auto: Feature<
         )
       ),
       upgReq: computed(() =>
-        Decimal.pow(
-          2,
-          Decimal.pow(player.auto[Automated.Ranks].level, 2)
-        ).times(1e3)
+        costs[Automated.Ranks](player.auto[Automated.Ranks].level)
+      ),
+      bulkBuy: computed(() =>
+        Decimal.div(player.rockets, 1e3)
+          .log(2)
+          .sqrt()
+          .sub(player.auto[Automated.Ranks].level)
+          .plus(1)
+          .floor()
       ),
       canBuyUpg: computed(() =>
         Decimal.gte(player.rockets, auto.data[Automated.Ranks].upgReq.value)
@@ -103,7 +116,7 @@ export const auto: Feature<
       ),
     },
     [Automated.Tiers]: {
-      visible: computed(() => player.featuresUnl.includes("auto")),
+      visible: computed(() => player.featuresUnl.includes('auto')),
       unl: computed(() => Decimal.gte(player.rockets, 1e5)),
       desc: computed(() => `${formatWhole(1e5)} Rockets`),
       power: computed(() =>
@@ -116,10 +129,15 @@ export const auto: Feature<
         )
       ),
       upgReq: computed(() =>
-        Decimal.pow(
-          3,
-          Decimal.pow(player.auto[Automated.Tiers].level, 2)
-        ).times(1e4)
+        costs[Automated.Tiers](player.auto[Automated.Tiers].level)
+      ),
+      bulkBuy: computed(() =>
+        Decimal.div(player.rockets, 1e4)
+          .log(3)
+          .sqrt()
+          .sub(player.auto[Automated.Tiers].level)
+          .plus(1)
+          .floor()
       ),
       canBuyUpg: computed(() =>
         Decimal.gte(player.rockets, auto.data[Automated.Tiers].upgReq.value)
@@ -132,11 +150,11 @@ export const auto: Feature<
 
   constants: {
     [Automated.Ranks]: {
-      upgResName: "Rockets",
+      upgResName: 'Rockets',
       masteryReq: 1e14,
     },
     [Automated.Tiers]: {
-      upgResName: "Rockets",
+      upgResName: 'Rockets',
       masteryReq: 2.5e15,
     },
   },
@@ -176,7 +194,20 @@ export const auto: Feature<
       );
       player.auto[type].level = Decimal.add(player.auto[type].level, 1);
     },
-
+    bulk: (type) => {
+      const auto1 = auto.data[type];
+      if (Decimal.eq(auto1.bulkBuy.value, 0)) return;
+      player.auto[type].level = Decimal.add(
+        player.auto[type].level,
+        auto1.bulkBuy.value
+      );
+      player.rockets = Decimal.sub(
+        player.rockets,
+        costs[type](
+          Decimal.add(player.auto[type].level, auto1.bulkBuy.value).sub(1)
+        )
+      );
+    },
     master: (type) => {
       if (
         player.auto[type].mastered ||

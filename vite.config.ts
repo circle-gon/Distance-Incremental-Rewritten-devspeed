@@ -9,15 +9,15 @@ export default defineConfig({
   plugins: [
     vue({ template: { transformAssetUrls } }),
     quasar({ sassVariables: 'src/quasar-variables.sass' }),
-    vConsole({
-      enable: true,
-    }),
+    {
+      ...vConsole({
+        enable: true,
+      }),
+      apply: 'serve',
+    },
     checker({
       vueTsc: true,
     }),
   ],
   base: './',
-  build: {
-    sourcemap: true,
-  },
 });

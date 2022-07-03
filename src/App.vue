@@ -52,7 +52,7 @@ function setDevSpeed() {
 
 <style>
 * {
-  color: white;
+  color: #989a9e;
   margin: 0 auto;
   text-align: center;
   font-family: Verdana, Geneva, Tahoma, sans-serif;

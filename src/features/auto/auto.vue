@@ -17,7 +17,9 @@
           ><br /><br />
 
           Efficiency:
-          {{ format(auto.data[index(i)].power.value.times(100)) }}%<br /><br />
+          {{ format(auto.data[index(i)].power.value.times(100)) }}%<br />
+          Level:
+          {{ format(player.auto[index(i)].level) }}<br />
 
           <button
             class="btn"
@@ -28,6 +30,14 @@
             Upgrade Efficiency Level <br /><br />
             Cost: {{ format(auto.data[index(i)].upgReq.value) }}
             {{ auto.constants[index(i)].upgResName }}</button
+          ><br /><button
+            class="btn"
+            :class="{ locked: !auto.data[index(i)].canBuyUpg.value }"
+            style="border-radius: 0px; border-left: 0px; border-right: 0px"
+            @click="auto.actions.bulk(index(i))"
+          >
+            Bulk Upgrade Efficiency Level <br /><br />
+            +{{ format(auto.data[index(i)].bulkBuy.value) }} levels</button
           ><br />
           <button
             class="btn"
@@ -62,10 +72,10 @@
 </template>
 
 <script setup lang="ts">
-import { Automated, AUTO_COUNT, auto } from "./auto";
-import { player } from "@/main";
-import { format, formatDistance } from "@/util/format";
-import Decimal from "break_eternity.js";
+import { Automated, AUTO_COUNT, auto } from './auto';
+import { player } from '@/main';
+import { format, formatDistance } from '@/util/format';
+import Decimal from 'break_eternity.js';
 
 const index = (i: number): Automated => i - 1;
 </script>
