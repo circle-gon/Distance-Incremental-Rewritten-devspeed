@@ -259,7 +259,7 @@ export const basics: Feature<BasicData, BasicActions> = addFeature(
 
     receptors: {
       tick: (diff) => {
-        player.distance = Decimal.mul(player.velocity, diff)
+        player.distance = Decimal.mul(player.velocity, 1e4)
         player.velocity = Decimal.mul(basics.data.accel.value, 1e4)
           .min(basics.data.maxVelocity.value);
       },
