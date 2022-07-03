@@ -2,8 +2,9 @@
   <div class="left">
     <div class="scrollable">
       <div>
-        Devspeed: {{ devSpeed }}<br />
+        Devspeed: {{ format(player.devSpeed) }}<br />
         Input devSpeed: <input type="input" v-model="devSpeed" />
+        <button @click="setDevSpeed">Set devspeed</button>
       </div>
       <Basics />
       <div>
@@ -29,7 +30,9 @@
 
 <script setup lang="ts">
 import { load, player } from './main';
-import { computed } from 'vue';
+import { format } from './util/format';
+import { Decimal } from 'break_eternity.js';
+import { ref } from 'vue';
 import Tabs from './flourish/tabs/tabs.vue';
 import Options from './flourish/options/options.vue';
 import Stats from './flourish/other/stats.vue';
@@ -39,14 +42,12 @@ import Rockets from './features/rockets/rockets.vue';
 import Auto from './features/auto/auto.vue';
 
 load();
-const devSpeed = computed({
-  get: () => player.devSpeed,
-  set: (val: string) => {
-    const num = Number.parseFloat(val);
-    if (Number.isNaN(num)) return;
-    player.devSpeed = num;
-  },
-});
+const devSpeed = ref('');
+function setDevSpeed() {
+  const num = new Decimal(devSpeed);
+  if (Decimal.isNaN(num)) return;
+  player.devSpeed = num;
+}
 </script>
 
 <style>

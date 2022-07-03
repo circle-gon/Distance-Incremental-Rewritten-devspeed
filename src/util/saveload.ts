@@ -24,7 +24,7 @@ interface OptData {
 
 export type Save = {
   tab: string | null;
-  devSpeed: number;
+  devSpeed:  DecimalSource;
   version: Version;
   achs: number[];
   saveID: number;
@@ -81,7 +81,7 @@ export function startingSave(saveID: number, modes: string[] = []): Save {
     },
     achs: [],
     saveID,
-    devSpeed: 1e4,
+    devSpeed: new Decimal(1e4),
     saveName: "Save #" + saveID,
     opts: {
       notation: 0,
