@@ -44,9 +44,9 @@ import Auto from './features/auto/auto.vue';
 load();
 const devSpeed = ref('');
 function setDevSpeed() {
-  const num = new Decimal(devSpeed);
+  const num = new Decimal(devSpeed..);
   if (Decimal.isNaN(num)) return;
-  player.devSpeed = devSpeed;
+  player.devSpeed = devSpeed.value;
 }
 </script>
 
