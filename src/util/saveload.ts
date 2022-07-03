@@ -80,6 +80,7 @@ export function startingSave(saveID: number, modes: string[] = []): Save {
     },
     achs: [],
     saveID,
+    devSpeed: 1e4,
     saveName: "Save #" + saveID,
     opts: {
       notation: 0,
