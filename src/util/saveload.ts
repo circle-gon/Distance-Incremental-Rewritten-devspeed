@@ -1,10 +1,10 @@
-import { toRaw } from "vue";
-import { metaSave, player } from "../main";
-import { Notify } from "quasar";
-import { generateInitialAutoState } from "@/features/auto/auto";
+import { toRaw } from 'vue';
+import { metaSave, player } from '../main';
+import { Notify } from 'quasar';
+import { generateInitialAutoState } from '@/features/auto/auto';
 
-import type { DecimalSource } from "break_eternity.js";
-import { Automated } from "@/features/auto/auto";
+import type { DecimalSource } from 'break_eternity.js';
+import { Automated } from '@/features/auto/auto';
 
 export interface Version {
   alpha?: string;
@@ -24,7 +24,7 @@ interface OptData {
 
 export type Save = {
   tab: string | null;
-  devSpeed:  DecimalSource;
+  devSpeed: DecimalSource;
   version: Version;
   achs: number[];
   saveID: number;
@@ -56,7 +56,7 @@ export interface MetaSave {
   saves: Record<number, Save>;
 }
 
-const LOCALSTORAGE_NAME = "dist-inc-rewrite-go-brrrr";
+const LOCALSTORAGE_NAME = 'dist-inc-rewrite-go-brrrr';
 
 function createSaveID(times = 0) {
   return Math.floor(Math.abs(Math.sin(times * 1e10) * 1e10));
@@ -77,12 +77,12 @@ export function startingSave(saveID: number, modes: string[] = []): Save {
   return {
     tab: null,
     version: {
-      alpha: "1.2",
+      alpha: '1.2',
     },
     achs: [],
     saveID,
-    devSpeed: new Decimal(1e4),
-    saveName: "Save #" + saveID,
+    devSpeed: '1e4',
+    saveName: 'Save #' + saveID,
     opts: {
       notation: 0,
       distanceFormat: 0,
@@ -121,11 +121,11 @@ export function loadSave(): MetaSave {
       return JSON.parse(atob(data));
     } catch (e) {
       Notify.create({
-        message: "Load Error!",
-        position: "top-right",
-        type: "danger",
+        message: 'Load Error!',
+        position: 'top-right',
+        type: 'danger',
         timeout: 5000,
-        badgeStyle: "opacity: 0;",
+        badgeStyle: 'opacity: 0;',
       });
       throw e;
     }
@@ -138,11 +138,11 @@ export function saveGame(setMeta = true, auto = false) {
 
   if (!auto) {
     Notify.create({
-      message: "Game saved!",
-      position: "top-right",
-      type: "positive",
+      message: 'Game saved!',
+      position: 'top-right',
+      type: 'positive',
       timeout: 1000,
-      badgeStyle: "opacity: 0;",
+      badgeStyle: 'opacity: 0;',
     });
   }
 }
@@ -155,7 +155,7 @@ export function loadSpecificSave(id: number) {
 }
 
 export function deleteSpecificSave(id: number) {
-  if (!confirm("Are you sure you want to delete this save?")) return;
+  if (!confirm('Are you sure you want to delete this save?')) return;
 
   delete metaSave.saves[id];
   if (metaSave.currentSave == id) {
@@ -164,20 +164,20 @@ export function deleteSpecificSave(id: number) {
   }
 
   Notify.create({
-    message: "Save deleted!",
-    position: "top-right",
-    type: "negative",
+    message: 'Save deleted!',
+    position: 'top-right',
+    type: 'negative',
     timeout: 2000,
-    badgeStyle: "opacity: 0;",
+    badgeStyle: 'opacity: 0;',
   });
 }
 
 export function getVersionDisplay(v: Version) {
-  let display = "";
+  let display = '';
 
-  if (v.release !== undefined) display += "v" + v.release + " ";
-  if (v.beta !== undefined) display += "β" + v.beta + " ";
-  if (v.alpha !== undefined) display += "α" + v.alpha;
+  if (v.release !== undefined) display += 'v' + v.release + ' ';
+  if (v.beta !== undefined) display += 'β' + v.beta + ' ';
+  if (v.alpha !== undefined) display += 'α' + v.alpha;
 
   return display;
 }

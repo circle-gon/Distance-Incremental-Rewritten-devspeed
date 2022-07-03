@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import { load, player } from './main';
 import { format } from './util/format';
-import { Decimal } from 'break_eternity.js';
+import Decimal from 'break_eternity.js';
 import { ref } from 'vue';
 import Tabs from './flourish/tabs/tabs.vue';
 import Options from './flourish/options/options.vue';
@@ -46,7 +46,7 @@ const devSpeed = ref('');
 function setDevSpeed() {
   const num = new Decimal(devSpeed);
   if (Decimal.isNaN(num)) return;
-  player.devSpeed = num;
+  player.devSpeed = devSpeed;
 }
 </script>
 
