@@ -1,4 +1,8 @@
 <template>
+  <div>
+    Devspeed: {{devSpeed}}<br/>
+    Input devSpeed: <input type="number" v-model="devSpeed" />
+  </div>
   <div class="left">
     <div class="scrollable">
       <Basics />
@@ -25,6 +29,7 @@
 
 <script setup lang="ts">
 import { load, player } from "./main";
+import {computed} from "vue"
 import Tabs from "./flourish/tabs/tabs.vue";
 import Options from "./flourish/options/options.vue";
 import Stats from "./flourish/other/stats.vue";
@@ -34,6 +39,14 @@ import Rockets from "./features/rockets/rockets.vue";
 import Auto from "./features/auto/auto.vue";
 
 load();
+const devSpeed = computed({
+  get: () => player.devSpeed,
+  set: (val: string) => {
+    const num = Number.parseFloat(val)
+    if (Number.isNaN(num)) return
+    player.devSpeed = num
+  }
+})
 </script>
 
 <style>
