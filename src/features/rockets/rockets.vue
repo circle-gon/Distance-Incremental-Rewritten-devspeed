@@ -34,11 +34,11 @@
 </template>
 
 <script setup lang="ts">
-import { formatWhole, format, formatDistance } from "@/util/format";
-import Decimal from "break_eternity.js";
-import { player } from "@/main";
-import { rockets } from "./rockets";
-import RocketFuel from "../rocketFuel/rocketFuel.vue";
+import { formatWhole, format, formatDistance } from '@/util/format';
+import Decimal from 'break_eternity.js';
+import { player } from '@/main';
+import { rockets } from './rockets';
+import RocketFuel from '../rocketFuel/rocketFuel.vue';
 </script>
 
 <style scoped>

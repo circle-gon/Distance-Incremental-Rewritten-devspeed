@@ -100,14 +100,15 @@ export const auto: Feature<
       upgReq: computed(() =>
         costs[Automated.Ranks](player.auto[Automated.Ranks].level)
       ),
-      bulkBuy: computed(() =>
-        Decimal.div(player.rockets, 1e3)
+      bulkBuy: computed(() => {
+        if (Decimal.lt(player.rockets, 1e)) return Decimal.dZero;
+        return Decimal.div(player.rockets, 1e3)
           .log(2)
           .sqrt()
           .sub(player.auto[Automated.Ranks].level)
           .plus(1)
-          .floor()
-      ),
+          .floor();
+      }),
       canBuyUpg: computed(() =>
         Decimal.gte(player.rockets, auto.data[Automated.Ranks].upgReq.value)
       ),
@@ -131,14 +132,15 @@ export const auto: Feature<
       upgReq: computed(() =>
         costs[Automated.Tiers](player.auto[Automated.Tiers].level)
       ),
-      bulkBuy: computed(() =>
-        Decimal.div(player.rockets, 1e4)
+      bulkBuy: computed(() => {
+        if (Decimal.lt(player.rockets, 1e4)) return Decimal.dZero;
+        return Decimal.div(player.rockets, 1e4)
           .log(3)
           .sqrt()
           .sub(player.auto[Automated.Tiers].level)
           .plus(1)
-          .floor()
-      ),
+          .floor();
+      }),
       canBuyUpg: computed(() =>
         Decimal.gte(player.rockets, auto.data[Automated.Tiers].upgReq.value)
       ),
@@ -206,7 +208,7 @@ export const auto: Feature<
         costs[type](
           Decimal.add(player.auto[type].level, auto1.bulkBuy.value).sub(1)
         )
-      );
+      ).max(0);
     },
     master: (type) => {
       if (

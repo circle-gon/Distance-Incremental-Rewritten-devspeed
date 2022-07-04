@@ -6,5 +6,10 @@ const app = createApp(App);
 app.use(Quasar, {
   plugins: { Notify },
 });
-
+app.config.errorHandler = (err, instance, info) => {
+  console.error('Vue error', err, info);
+};
+app.config.warnHandler = (msg, instance, trace) => {
+  console.warn('vue warn', msg, trace);
+};
 app.mount('#app');

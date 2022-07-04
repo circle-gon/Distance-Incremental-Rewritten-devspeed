@@ -1,8 +1,8 @@
-import { player } from "@/main";
-import { computed } from "@vue/reactivity";
+import { player } from '@/main';
+import { computed } from '@vue/reactivity';
 
-import type { ComputedRef } from "@vue/reactivity";
-import type { StyleValue } from "vue";
+import type { ComputedRef } from '@vue/reactivity';
+import type { StyleValue } from 'vue';
 
 interface TabData {
   name: string;
@@ -13,27 +13,27 @@ interface TabData {
 
 const TAB_DATA: TabData[] = [
   {
-    name: "Options",
+    name: 'Options',
   },
   {
-    name: "Stats",
+    name: 'Stats',
   },
   {
-    name: "Achievements",
+    name: 'Achievements',
   },
   {
-    name: "Rockets",
+    name: 'Rockets',
     class: {
       rockets: true,
     },
-    condition: computed(() => player.featuresUnl.includes("rockets")),
+    condition: computed(() => player.featuresUnl.includes('rockets')),
   },
   {
-    name: "Automation",
+    name: 'Automation',
     class: {
       auto: true,
     },
-    condition: computed(() => player.featuresUnl.includes("auto")),
+    condition: computed(() => player.featuresUnl.includes('auto')),
   },
 ];
 
@@ -43,4 +43,5 @@ export function availableTabs(): TabData[] {
 
 export function setTab(name: string) {
   player.tab = name;
+  console.log('tab change');
 }

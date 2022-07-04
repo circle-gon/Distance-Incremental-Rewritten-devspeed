@@ -2,8 +2,7 @@
   <br /><br /><br />
   <b>{{ formatWhole(player.rocketFuel) }} Rocket Fuel</b><br /><br />
   <button
-    id="rocket-fuel"
-    class="btn"
+    class="btn rocket-fuel"
     :class="{
       locked: Decimal.lt(player.rockets, rocketFuel.data.cost.value),
     }"
@@ -11,6 +10,15 @@
   >
     Spend your rockets to gain Rocket Fuel.<br /><br />
     <b>Cost: {{ formatWhole(rocketFuel.data.cost.value) }} Rockets</b></button
+  ><br /><button
+    class="btn rocket-fuel"
+    :class="{
+      locked: Decimal.lt(player.rockets, rocketFuel.data.cost.value),
+    }"
+    @click="rocketFuel.actions.bulk()"
+  >
+    Bulk buy rocket fuel for the lazy.<br /><br />
+    <b>+{{ formatWhole(rocketFuel.data.bulk.value) }} Rocket Fuel</b></button
   ><br /><br /><br />
 
   <span v-if="Decimal.gte(player.rocketFuel, 1)"
@@ -40,14 +48,14 @@
 </template>
 
 <script setup lang="ts">
-import { formatWhole, format } from "@/util/format";
-import Decimal from "break_eternity.js";
-import { player } from "@/main";
-import { rocketFuel } from "./rocketFuel";
+import { formatWhole, format } from '@/util/format';
+import Decimal from 'break_eternity.js';
+import { player } from '@/main';
+import { rocketFuel } from './rocketFuel';
 </script>
 
 <style scoped>
-#rocket-fuel {
+.rocket-fuel {
   background-color: hsl(30, 15%, 50%);
   border: hsl(0, 0%, 25%) 2px solid;
   padding-left: 5px;
@@ -57,7 +65,7 @@ import { rocketFuel } from "./rocketFuel";
   margin-bottom: 3px;
 }
 
-#rocket-fuel:not(.locked):hover {
+.rocket-fuel:not(.locked):hover {
   background-color: hsl(30, 25%, 65%);
 }
 </style>
