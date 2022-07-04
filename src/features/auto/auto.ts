@@ -101,7 +101,7 @@ export const auto: Feature<
         costs[Automated.Ranks](player.auto[Automated.Ranks].level)
       ),
       bulkBuy: computed(() => {
-        if (Decimal.lt(player.rockets, 1e)) return Decimal.dZero;
+        if (Decimal.lt(player.rockets, 1e3)) return Decimal.dZero;
         return Decimal.div(player.rockets, 1e3)
           .log(2)
           .sqrt()
