@@ -139,7 +139,7 @@ export const auto: Feature<
           .sqrt()
           .sub(player.auto[Automated.Tiers].level)
           .plus(1)
-          .floor();
+          .floor()
       }),
       canBuyUpg: computed(() =>
         Decimal.gte(player.rockets, auto.data[Automated.Tiers].upgReq.value)
