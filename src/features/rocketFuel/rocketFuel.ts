@@ -39,6 +39,7 @@ export const rocketFuel: Feature<
         .root(1.5)
         .sub(player.rocketFuel)
         .plus(1)
+        .max(0)
         .floor();
     }),
     eff1: computed(() =>
