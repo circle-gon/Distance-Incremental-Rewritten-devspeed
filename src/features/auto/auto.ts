@@ -175,7 +175,8 @@ export const auto: Feature<
         )
       ),
       bulkBuy: computed(() => {
-        return Decimal.div(player.rockets, 500)
+        if (Decimal.lt(player.timeReversal.cubes, 1e4)) return Decimal.dZero;
+        return Decimal.div(player.timeReversal.cubes, 500)
           .log(1.5)
           .sqrt()
           .sub(player.auto[Automated.Rockets].level)

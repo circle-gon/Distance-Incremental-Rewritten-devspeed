@@ -5,7 +5,7 @@ import { computed } from '@vue/reactivity';
 import { Notify } from 'quasar';
 import Decimal from 'break_eternity.js';
 import { watch } from 'vue';
-import { timeReversal } from "../timeReversal/timeReversal";
+import { timeReversal } from '../timeReversal/timeReversal';
 
 import type { Feature } from '@/util/feature';
 import { auto } from '../auto/auto';
@@ -26,7 +26,7 @@ export const ACH_NAMES: Record<number, string> = {
   14: 'Off to Space!',
   15: 'Rocket Blast',
   16: 'Overly Complex',
-  17: "Into the Endless",
+  17: 'Into the Endless',
 
   21: 'Driving for Hours',
   22: 'Oil Change',
@@ -34,7 +34,7 @@ export const ACH_NAMES: Record<number, string> = {
   24: 'Repeated Blasts',
   25: 'Refuel',
   26: 'Riveting Gameplay',
-  27: "Prehistory Awakens",
+  27: 'Prehistory Awakens',
 
   31: 'Just Under a Saturn Revolution',
   32: 'Putting in the Fake Fuel',
@@ -42,14 +42,14 @@ export const ACH_NAMES: Record<number, string> = {
   34: 'Super Engineer',
   35: "Coal isn't Enough!",
   36: 'Sisyphean Effort',
-  37: "Tesseractophobia?",
+  37: 'Tesseractophobia?',
 
-  41: "Parallax to the Tenth",
-  42: "Musty Progress",
-  43: "Brings a Tier to my Eye",
-  44: "Diablo Incarnate",
-  45: "No Furnace?",
-  46: "Who Needs Mechanics?",
+  41: 'Parallax to the Tenth',
+  42: 'Musty Progress',
+  43: 'Brings a Tier to my Eye',
+  44: 'Diablo Incarnate',
+  45: 'No Furnace?',
+  46: 'Who Needs Mechanics?',
   47: "The Gods' Sprinkle",
 };
 
@@ -98,7 +98,7 @@ export const achs: Feature<AchData, {}> = addFeature('achs', 1, {
       reward: `Double Rocket gain.`,
     })),
     17: computed(() => ({
-      unl: player.featuresUnl.includes("timeReversal"),
+      unl: player.featuresUnl.includes('timeReversal'),
       desc: `Unlock Time Reversal.`,
       reward: `Unlock the Rocket Autobuyer.`,
     })),
@@ -136,6 +136,11 @@ export const achs: Feature<AchData, {}> = addFeature('achs', 1, {
     26: computed(() => ({
       unl: player.auto[1].active,
       desc: `Activate the Tier Autobuyer.`,
+    })),
+    27: computed(() => ({
+      unl: Decimal.gte(player.timeReversal.cubes, 5555),
+      desc: `Reach ${formatWhole(5555)} Time Cubes.`,
+      reward: `Increase Time Speed by ${formatWhole(10)}%.`,
     })),
 
     31: computed(() => ({
