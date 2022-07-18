@@ -49,6 +49,11 @@ export type Save = {
       level: DecimalSource;
     }
   >;
+  timeReversal: {
+    active: boolean;
+    cubes: DecimalSource;
+    upgrades: number[];
+  };
 };
 
 export interface MetaSave {
@@ -77,7 +82,7 @@ export function startingSave(saveID: number, modes: string[] = []): Save {
   return {
     tab: null,
     version: {
-      alpha: '1.2',
+      alpha: '1.3',
     },
     achs: [],
     saveID,
@@ -103,6 +108,11 @@ export function startingSave(saveID: number, modes: string[] = []): Save {
     rockets: 0,
     rocketFuel: 0,
     auto: generateInitialAutoState(),
+    timeReversal: {
+      active: false,
+      cubes: 0,
+      upgrades: [],
+    },
   };
 }
 

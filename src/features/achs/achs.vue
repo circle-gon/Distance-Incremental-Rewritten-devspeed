@@ -33,12 +33,12 @@
 </template>
 
 <script setup lang="ts">
-import { ACH_NAMES, achs, hasAch, getAchCount } from "./achs";
-import { formatWhole } from "@/util/format";
-import Tooltip from "@/components/Tooltip.vue";
+import { ACH_NAMES, achs, hasAch, getAchCount } from './achs';
+import { formatWhole } from '@/util/format';
+import Tooltip from '@/components/Tooltip.vue';
 
-const ACH_ROWS = 3;
-const ACH_COLS = 6;
+const ACH_ROWS = 4;
+const ACH_COLS = 7;
 </script>
 
 <style scoped>

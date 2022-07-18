@@ -1,9 +1,9 @@
-import { player } from "@/main";
-import { watch } from "vue";
+import { player } from '@/main';
+import { watchEffect } from 'vue';
 
-import type { ComputedRef } from "vue";
+import type { ComputedRef } from 'vue';
 
-type Signal = "tick" | "reset" | "load";
+type Signal = 'tick' | 'reset' | 'load';
 
 interface Receptors {
   tick?: (diff: number) => void;
@@ -34,12 +34,16 @@ const features: Record<string, Feature<unknown, unknown>> = {};
 const featureOrder: Record<number, string> = {};
 
 export function signal(sig: Signal, info: number) {
-  if (sig === "load") {
-    for (const index in featureOrder)
-      features[featureOrder[index]].receptors[sig]?.();
-  } else {
-    for (const index in featureOrder)
-      features[featureOrder[index]].receptors[sig]?.(info);
+  switch (sig) {
+    case 'load':
+      for (const index in featureOrder)
+        features[featureOrder[index]].receptors[sig]?.();
+      break;
+
+    default:
+      for (const index in featureOrder)
+        features[featureOrder[index]].receptors[sig]?.(info);
+      break;
   }
 }
 
@@ -59,19 +63,14 @@ export function setupWatchers() {
     const key = featureOrder[index];
     const feature = features[key];
 
-    watch(
-      feature.unl.reached,
-      (reached) => {
-        if (!player.featuresUnl.includes(key) && reached)
-          player.featuresUnl.push(key);
-      },
-      { immediate: true }
-    );
+    watchEffect(() => {
+      if (!player.featuresUnl.includes(key) && feature.unl.reached.value)
+        player.featuresUnl.push(key);
+    });
 
     if (feature.watchers !== undefined) {
       for (const wKey in feature.watchers) {
-        const data = feature.watchers[wKey]();
-        watch(data.toWatch, data.callback, { immediate: true });
+        watchEffect(feature.watchers[wKey]);
       }
     }
   }
@@ -83,7 +82,7 @@ export function getUnlockDesc() {
     if (!player.featuresUnl.includes(key)) return features[key].unl.desc.value;
   }
 
-  return "All features unlocked!";
+  return 'All features unlocked!';
 }
 
 export default features;
