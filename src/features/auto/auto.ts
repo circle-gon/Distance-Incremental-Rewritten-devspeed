@@ -54,6 +54,8 @@ const costs = {
     Decimal.pow(2, Decimal.pow(lvl, 2)).times(1e3),
   [Automated.Tiers]: (lvl: DecimalSource) =>
     Decimal.pow(3, Decimal.pow(lvl, 2)).times(1e4),
+  [Automated.Rockets]: (lvl: DecimalSource) =>
+    Decimal.pow(1.5, Decimal.pow(lvl, 2)).times(500),
 };
 export function generateInitialAutoState() {
   return new Array(AUTO_COUNT)
@@ -164,10 +166,7 @@ export const auto: Feature<
           .min(1)
       ),
       upgReq: computed(() =>
-        Decimal.pow(
-          1.5,
-          Decimal.pow(player.auto[Automated.Rockets].level, 2)
-        ).times(500)
+        costs[Automated.Rockets](player.auto[Automated.Rockets].level)
       ),
       canBuyUpg: computed(() =>
         Decimal.gte(
@@ -175,6 +174,15 @@ export const auto: Feature<
           auto.data[Automated.Rockets].upgReq.value
         )
       ),
+      bulkBuy: computed(() => {
+        return Decimal.div(player.rockets, 500)
+          .log(1.5)
+          .sqrt()
+          .sub(player.auto[Automated.Rockets].level)
+          .plus(1)
+          .max(0)
+          .floor();
+      }),
       masteryDesc: computed(() => `Multiply Rocket gain by ${format(2.5)}.`),
     },
   },
@@ -280,16 +288,16 @@ export const auto: Feature<
   watchers: new Array(AUTO_COUNT).fill({}).map((_, i) => {
     const a = i as Automated;
     return () => {
+      if (player.auto[a] === undefined) {
+        player.auto[a] = {
+          unl: false,
+          active: false,
+          mastered: false,
+          level: 0,
+        };
+      }
       if (!player.auto[a].unl && auto.data[a].unl.value)
-        if (player.auto[a] === undefined) {
-          player.auto[a] = {
-            unl: false,
-            active: false,
-            mastered: false,
-            level: 0,
-          };
-        } else if (!player.auto[a].unl && auto.data[a].unl.value)
-          player.auto[a].unl = true;
+        player.auto[a].unl = true;
     };
   }),
 });

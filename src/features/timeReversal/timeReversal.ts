@@ -93,11 +93,9 @@ export const timeReversal: Feature<
   receptors: {
     tick: (diff) => {
       if (player.timeReversal.active) {
-        player.distance = Decimal.div(player.distance, Decimal.pow(2, diff));
-
         player.timeReversal.cubes = Decimal.mul(
           timeReversal.data.timeCubeGain.value,
-          diff
+          player.devSpeed
         ).times(timeReversal.data.timeSpeed.value);
       }
     },

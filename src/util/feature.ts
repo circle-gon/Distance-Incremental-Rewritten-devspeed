@@ -24,10 +24,7 @@ export type Feature<
   data: ComputedData;
   receptors: Receptors;
   actions: Actions;
-  watchers?: (() => {
-    toWatch: ComputedRef<unknown>;
-    callback: (value: unknown) => void;
-  })[];
+  watchers?: (() => void)[];
 } & FurtherOptions;
 
 const features: Record<string, Feature<unknown, unknown>> = {};
