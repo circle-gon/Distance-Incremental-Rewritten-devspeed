@@ -293,12 +293,19 @@ export const basics: Feature<BasicData, BasicActions> = addFeature(
 
     receptors: {
       tick: (diff) => {
-        player.distance = Decimal.mul(player.velocity, player.devSpeed).times(
-          timeReversal.data.timeSpeed.value
+        player.distance = Decimal.plus(
+          player.distance,
+          Decimal.mul(player.velocity, player.devSpeed)
+            .mul(timeReversal.data.timeSpeed.value)
+            .mul(diff)
         );
-        player.velocity = Decimal.mul(basics.data.accel.value, player.devSpeed)
-          .times(timeReversal.data.timeSpeed.value)
-          .min(basics.data.maxVelocity.value);
+        player.velocity = Decimal.plus(
+          player.velocity,
+          Decimal.mul(basics.data.accel.value, player.devSpeed)
+            .times(timeReversal.data.timeSpeed.value)
+            .mul(diff)
+        )
+        .min(basics.data.maxVelocity.value);
       },
 
       reset: (id) => {

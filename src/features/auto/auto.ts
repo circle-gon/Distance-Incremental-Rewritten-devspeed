@@ -204,7 +204,7 @@ export const auto: Feature<
   },
 
   receptors: {
-    tick: () => {
+    tick: (diff) => {
       if (player.auto[Automated.Ranks].active) {
         player.rank = Decimal.max(player.rank, basics.data.rankTarget.value);
       }
@@ -212,9 +212,9 @@ export const auto: Feature<
         player.tier = Decimal.max(player.tier, basics.data.tierTarget.value);
       }
       if (player.auto[Automated.Rockets].active) {
-        player.rockets = Decimal.mul(
-          rockets.data.resetGain.value,
-          player.devSpeed
+        player.rockets = Decimal.plus(
+          player.rockets,
+          Decimal.mul(rockets.data.resetGain.value, player.devSpeed).mul(diff)
         );
       }
     },
