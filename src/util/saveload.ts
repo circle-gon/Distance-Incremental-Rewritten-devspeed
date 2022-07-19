@@ -129,8 +129,8 @@ export function loadSave(): MetaSave {
   if (data === null) return startingMetaSave();
   else {
     try {
-      let save1 = LZString.decompressFromUTF16(data);
-      return JSON.parse(save1[0] === '{' ? save1 : atob(data));
+      let save = LZString.decompressFromUTF16(data) || '';
+      return JSON.parse(save[0] === '{' ? save : atob(data));
     } catch (e) {
       Notify.create({
         message: 'Load Error!',
