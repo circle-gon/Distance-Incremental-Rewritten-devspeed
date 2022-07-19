@@ -50,5 +50,4 @@ export function availableTabs(): TabData[] {
 
 export function setTab(name: string) {
   player.tab = name;
-  console.log('tab change');
 }

@@ -2,6 +2,7 @@ import { toRaw } from 'vue';
 import { metaSave, player } from '../main';
 import { Notify } from 'quasar';
 import { generateInitialAutoState } from '@/features/auto/auto';
+import LZString from 'lz-string';
 
 import type { DecimalSource } from 'break_eternity.js';
 import type { Automated } from '@/features/auto/auto';
@@ -55,7 +56,7 @@ export type Save = {
     upgrades: number[];
   };
 };
-
+window.LZString = LZString;
 export interface MetaSave {
   currentSave: number;
   saves: Record<number, Save>;
@@ -82,7 +83,7 @@ export function startingSave(saveID: number, modes: string[] = []): Save {
   return {
     tab: null,
     version: {
-      alpha: '1.3',
+      alpha: '1.5',
     },
     achs: [],
     saveID,
@@ -128,7 +129,8 @@ export function loadSave(): MetaSave {
   if (data === null) return startingMetaSave();
   else {
     try {
-      return JSON.parse(atob(data));
+      let save1 = LZString.decompressFromUTF16(data);
+      return JSON.parse(save1[0] === '{' ? save1 : atob(data));
     } catch (e) {
       Notify.create({
         message: 'Load Error!',
@@ -144,7 +146,10 @@ export function loadSave(): MetaSave {
 
 export function saveGame(setMeta = true, auto = false) {
   if (setMeta) metaSave.saves[metaSave.currentSave] = toRaw(player);
-  localStorage.setItem(LOCALSTORAGE_NAME, btoa(JSON.stringify(metaSave)));
+  localStorage.setItem(
+    LOCALSTORAGE_NAME,
+    LZString.compressToUTF16(JSON.stringify(metaSave))
+  );
 
   if (!auto) {
     Notify.create({

@@ -56,7 +56,6 @@ load();
 const devSpeed = ref('');
 function setDevSpeed() {
   const num = new Decimal(devSpeed.value);
-  console.log(Decimal.isFinite(num), Decimal.isNaN(num));
   if (Decimal.isNaN(num) || !Decimal.isFinite(num)) return;
   player.devSpeed = devSpeed.value;
 }

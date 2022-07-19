@@ -9,12 +9,12 @@ export default defineConfig({
   plugins: [
     vue({ template: { transformAssetUrls } }),
     quasar({ sassVariables: 'src/quasar-variables.sass' }),
-    {
+    /*{
       ...vConsole({
         enable: true,
       }),
       apply: 'serve',
-    },
+    },*/
     checker({
       vueTsc: true,
     }),
